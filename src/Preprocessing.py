@@ -10,8 +10,25 @@ class Preprocessing:
         self.scaler = None
         self.encoder = None
 
-    def fit(self, X_train, y_train):
-        pass
+    def fit(self, X_train, y_train=None):
+
+        X_train = X_train.copy()
+
+        X_train["bmi_category"] = X_train["bmi"].apply(self._bmi_category)
+        X_train = self._add_age_group(X_train)
+        X_train = self._add_smoker_age(X_train)
+        X_train = self._add_smoker_bmi(X_train)
+
+        self.cat_cols = ["sex", "region", "smoker", "age_group", "bmi_category"]
+        self.num_cols = ["age", "bmi", "smoker_age", "smoker_bmi"]
+
+
+        self.encoder = OneHotEncoder(handle_unknown="ignore", sparse_output=False)
+        self.encoder.fit(X_train[self.cat_cols])
+        self.scaler = StandardScaler()
+        self.scaler.fit(X_train[self.num_cols])
+
+        return self
 
     def transform(self, X_test):
 
