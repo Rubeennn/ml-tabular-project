@@ -58,6 +58,9 @@ class Preprocessing:
 
         return X_test
 
+    def fit_transform(self, X_train, y_train=None):
+        return self.fit(X_train, y_train).transform(X_train)
+
 
     @staticmethod
     def _bmi_category(bmi):
