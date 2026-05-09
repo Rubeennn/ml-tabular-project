@@ -40,17 +40,15 @@ class Preprocessing:
         X_test = self._add_smoker_age(X_test)
         X_test = self._add_smoker_bmi(X_test)
 
-        cat_cols = ["sex", "region", "smoker", "age_group", "bmi_category"]
-        X_cat = X_test[cat_cols]
+        X_cat = X_test[self.cat_cols]
 
         X_cat_encoded = pd.DataFrame(
             self.encoder.transform(X_cat),
-            columns=self.encoder.get_feature_names_out(cat_cols),
+            columns=self.encoder.get_feature_names_out(self.cat_cols),
             index=X_test.index
         )
 
-        num_cols = ["age", "bmi", "smoker_age", "smoker_bmi"]
-        X_num = X_test[num_cols]
+        X_num = X_test[self.num_cols]
 
 
         X_test = pd.concat([X_num, X_cat_encoded], axis=1)
